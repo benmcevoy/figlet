@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 namespace Figlet.Rendering
@@ -39,11 +38,8 @@ namespace Figlet.Rendering
 
                 for (var i = 0; i < _font.FontInfo.Height; i++)
                 {
-
                     foreach (var character in page.Take(lineBreakIndex))
                     {
-
-
                         writer.Write(character.Lines[line]);
                     }
 
@@ -51,7 +47,6 @@ namespace Figlet.Rendering
 
                     line++;
                 }
-
             }
         }
 
@@ -77,11 +72,15 @@ namespace Figlet.Rendering
             // and then go back and find the first space - . , ! ? " ) ( /
             while (i > 0)
             {
-                if (Regex.IsMatch(chars[i].Value.ToString(), @"[ \.\^\*\+\?\(\)\[\{\\\|\-\],!/]"))
+                if (len < columns)
                 {
-                    return i + 1;
+                    if (Regex.IsMatch(chars[i].Value.ToString(), @"[ \.\^\*\+\?\(\)\[\{\\\|\-\],!/]", RegexOptions.IgnoreCase))
+                    {
+                        return i+1;
+                    }
                 }
 
+                len -= chars[i].Lines[0].Length;
                 i--;
             }
 

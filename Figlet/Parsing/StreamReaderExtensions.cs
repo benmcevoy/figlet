@@ -21,15 +21,5 @@ namespace Figlet.Parsing
 
             return new string(buffer, 0, bufferIndex);
         }
-
-        public static char ReadChar(this StreamReader sr)
-        {
-            if (!sr.EndOfStream)
-            {
-                return (char)sr.Read();
-            }
-
-            return '\0';
-        }
     }
 }

@@ -12,26 +12,31 @@ namespace Figlet.Parsing
             using (var fs = new FileStream(fontPath, FileMode.Open, FileAccess.Read))
             using (var sr = new StreamReader(fs, Encoding.UTF8))
             {
-                if (sr.EndOfStream) throw new InvalidOperationException("file is empty?");
-
-                var fontInfo = GetFontInfo(sr.ReadLine());
-                var chars = new Dictionary<char, Character>(102); 
-                var i = 0;
-
-                for (var j = 0; j < fontInfo.CommentLines; j++)
-                {
-                    sr.ReadLine();
-                }
-
-                while (!sr.EndOfStream && i < 102)
-                {
-                    var c = GetChar(sr, fontInfo, i);
-                    chars[c.Value] = c;
-                    i++;
-                }
-
-                return new Font(fontInfo, chars);
+                return Lex(sr);
             }
+        }
+
+        public Font Lex(StreamReader sr)
+        {
+            if (sr.EndOfStream) throw new InvalidOperationException("file is empty?");
+
+            var fontInfo = GetFontInfo(sr.ReadLine());
+            var chars = new Dictionary<char, Character>(102);
+            var i = 0;
+
+            for (var j = 0; j < fontInfo.CommentLines; j++)
+            {
+                sr.ReadLine();
+            }
+
+            while (!sr.EndOfStream && i < 102)
+            {
+                var c = GetChar(sr, fontInfo, i);
+                chars[c.Value] = c;
+                i++;
+            }
+
+            return new Font(fontInfo, chars);
         }
 
         private static Character GetChar(StreamReader sr, FontInfo fontInfo, int index)
@@ -41,12 +46,12 @@ namespace Figlet.Parsing
 
             for (var i = 0; i < fontInfo.Height; i++)
             {
-                var line  = sr.ReadLine();
+                var line = sr.ReadLine();
                 // you need the HardBlank for kerning/"smushing" rules
                 line = line.Replace(fontInfo.HardBlank, Tokens.Space);
 
                 line = (i == lastIndex)
-                    ? line.Remove(line.Length - 2) 
+                    ? line.Remove(line.Length - 2)
                     : line.Remove(line.Length - 1);
 
                 lines[i] = line;
