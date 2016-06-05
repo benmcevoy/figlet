@@ -61,13 +61,13 @@
     <Content Include="Fonts\computer.flf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Fonts\doom.flf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Fonts\doom.flf" />
     <Content Include="Fonts\graffiti.flf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Fonts\standard.flf" />
+    <Content Include="Fonts\standard.flf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Fonts\smkeyboard.flf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

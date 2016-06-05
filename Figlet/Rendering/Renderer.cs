@@ -52,13 +52,14 @@ namespace Figlet.Rendering
 
         private static int GetLineBreakIndex(IList<Character> chars, int length, int columns)
         {
-            if (columns >= length) return chars.Count;
-
             var len = 0;
             var i = 0;
 
             foreach (var character in chars)
             {
+                if (character.Ascii == 13) return i + 1;
+               // if (character.Ascii == 10) return i + 1;
+
                 len += character.Lines[0].Length;
 
                 if (len >= columns) break;
@@ -74,9 +75,9 @@ namespace Figlet.Rendering
             {
                 if (len < columns)
                 {
-                    if (Regex.IsMatch(chars[i].Value.ToString(), @"[ \.\^\*\+\?\(\)\[\{\\\|\-\],!/]", RegexOptions.IgnoreCase))
+                    if (Regex.IsMatch(chars[i].Value.ToString(), @"[ \.\^\*\+\?\(\)\[\{\\\|\-\]\t,!/]", RegexOptions.IgnoreCase))
                     {
-                        return i+1;
+                        return i + 1;
                     }
                 }
 

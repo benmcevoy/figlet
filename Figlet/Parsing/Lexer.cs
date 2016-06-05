@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace Figlet.Parsing
@@ -9,14 +10,20 @@ namespace Figlet.Parsing
     {
         public Font Lex(string fontPath)
         {
+            if (!File.Exists(fontPath)) return Lex();
+
             using (var fs = new FileStream(fontPath, FileMode.Open, FileAccess.Read))
             using (var sr = new StreamReader(fs, Encoding.UTF8))
-            {
                 return Lex(sr);
-            }
         }
 
-        public Font Lex(StreamReader sr)
+        public Font Lex()
+        {
+            var sr = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Figlet.Fonts.standard.flf"));
+            return Lex(sr);
+        }
+
+        private static Font Lex(StreamReader sr)
         {
             if (sr.EndOfStream) throw new InvalidOperationException("file is empty?");
 
@@ -39,7 +46,7 @@ namespace Figlet.Parsing
             return new Font(fontInfo, chars);
         }
 
-        private static Character GetChar(StreamReader sr, FontInfo fontInfo, int index)
+        private static Character GetChar(TextReader sr, FontInfo fontInfo, int index)
         {
             var lines = new string[fontInfo.Height];
             var lastIndex = fontInfo.Height - 1;
@@ -47,6 +54,7 @@ namespace Figlet.Parsing
             for (var i = 0; i < fontInfo.Height; i++)
             {
                 var line = sr.ReadLine();
+
                 // you need the HardBlank for kerning/"smushing" rules
                 line = line.Replace(fontInfo.HardBlank, Tokens.Space);
 
