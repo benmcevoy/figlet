@@ -19,7 +19,7 @@ namespace Figlet.Parsing
 
         public Font Lex()
         {
-            var sr = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Figlet.Fonts.standard.flf"));
+            var sr = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Figlet.Fonts.doom.flf"));
             return Lex(sr);
         }
 
